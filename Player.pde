@@ -53,8 +53,8 @@ class Player
   
   void draw()
   {
-    fill(255);
-    stroke(255);
+    fill(0,0,255);
+    stroke(0,0,255);
     rect(position.x, position.y, myWidth, myHeight);
   }
 }

@@ -1,6 +1,10 @@
+import ddf.minim.*;
+
 void setup()
 {
   size(500, 500);
+  
+  minim = new Minim(this);
   
   player = new Player();
   enemies = new Enemy[11];
@@ -8,6 +12,28 @@ void setup()
   {
     enemies[i] = new Enemy();
   }  
+  
+  myFont = loadFont("ComicSansMS-48.vlw");
+  screenFont = loadFont("ComicSansMS-16.vlw");
+  growl = minim.loadSnippet("growl.mp3");
+  textFont(myFont);
+  
+  images = new PImage[3];
+  for (int i = 0 ; i < images.length ; i ++)
+  {
+    images[i] = loadImage(i + ".png");
+  }  
+  
+  
+}
+
+void playSound()
+{  
+  if (!growl.isPlaying()) 
+  {
+    growl.rewind(); 
+    growl.play();
+  }
 }
 
 void setupEnemies()
@@ -22,16 +48,31 @@ void setupEnemies()
 
 Player player;
 Enemy[] enemies;
+Minim minim;
+AudioSnippet growl; 
+PFont myFont;
+PImage[] images;
+PFont screenFont;
 
 int state = 0;
 int enemyGap;
 
+int textCount = 0;
+
+void printMessage(String message)
+{
+  fill(0,0,255);
+  textFont(myFont, 48);  
+  textAlign(CENTER, CENTER);
+  text(message, width/2, height / 2);  
+}
+
 void splashState()
 {
-  text("Square Things from Space", 200, 200);
-  text("Press any key to begin", 200, 300);
+  image(images[state], 0, 0);
+  printMessage("Square Things\nFrom Space\nPress space key\nto begin");
   
-  if (keyPressed)
+  if (keyPressed && key == ' ')
   {
     player.score = 0;
     player.lives = 3;
@@ -44,9 +85,13 @@ void splashState()
 
 void gameOverState()
 {
-  text("Game Over", 50, 50);
-  text("You scored: " + player.score, 50, 100);
-  text("Press space key to begin again", 50, 150);
+  image(images[state], 0, 0);
+
+  String message = "";
+  message += "Game Over\n";
+  message += "You scored: " + player.score + "\n";
+  message += "Press space key\nTo play again";
+  printMessage(message);
   
   if (keyPressed && key == ' ')
   {
@@ -56,6 +101,8 @@ void gameOverState()
 
 void gameState()
 {
+  image(images[state], 0, 0);
+
   player.update();
   player.draw();
   
@@ -70,6 +117,7 @@ void gameState()
         switch(enemies[i].type)
         {
           case 0:
+            playSound();
             player.lives --;
             break;
           case 1:
@@ -82,6 +130,9 @@ void gameState()
     }        
   }  
   fill(255);
+  
+  textFont(screenFont, 16);
+  textAlign(LEFT, CENTER);
   text("Lives: " + player.lives, 10, 10);
   text("Score: " + player.score, 10, 30);
   if (player.lives == 0)
