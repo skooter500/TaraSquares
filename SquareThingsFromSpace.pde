@@ -2,6 +2,7 @@ import ddf.minim.*;
 
 void setup()
 {
+  frame.setTitle("Tara Squares");
   size(500, 500);
   
   minim = new Minim(this);
