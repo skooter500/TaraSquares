@@ -29,13 +29,19 @@ class Enemy
     setType();
   }
   
+  void setRandomX()
+  {
+      int spaces = width / (int)myWidth;            
+      position.x = (int) random(0, spaces) * myWidth;      
+  }
+  
   void update()
   {
     position.y += speed;
     if (position.y > height)
     {
       position.y = - myHeight;
-      position.x = random(0, width - myWidth);
+      setRandomX();
       if (! alive)
       {
         alive = true;
@@ -56,6 +62,6 @@ class Enemy
         stroke(255, 0,0);
         fill(255, 0,0);        
     }
-    rect(position.x, position.y, myWidth, myHeight);
+    rect(position.x, position.y, myWidth - 1, myHeight - 1);
   }
 }
