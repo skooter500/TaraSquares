@@ -44,6 +44,7 @@ void setupEnemies()
   for (int i = 0 ; i < enemies.length ; i ++)
   {    
     enemies[i].setRandomX();
+    enemies[i].setType();
     enemies[i].position.y = - (gap * i);
   }
 }
@@ -139,7 +140,7 @@ void gameState()
   textAlign(LEFT, CENTER);
   text("Lives: " + player.lives, 10, 10);
   text("Score: " + player.score, 10, 30);
-  if (player.lives < 0)
+  if (player.lives <= 0)
   {
     state ++;
   }
